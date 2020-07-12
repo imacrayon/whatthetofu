@@ -110,7 +110,7 @@
         opacity: 0.75;
       }
       select {
-        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3' stroke='%239fa6b2' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M7 7l3-3 3 3m0 6l-3 3-3-3' stroke='%239f0f2e' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
@@ -126,6 +126,9 @@
         line-height: 1.5;
         background-position: right 0.5rem center;
         background-size: 1.5em 1.5em;
+      }
+      select::-ms-expand {
+        display: none;
       }
       select:focus {
         outline: 1px dotted;
