@@ -1,12 +1,7 @@
 {
-    "name": "What Tofu",
+    "name": "What the Tofu",
     "short_name": "What Tofu",
     "icons": [
-        {
-            "src": "/android-chrome-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
         {
             "src": "/android-chrome-512x512.png",
             "sizes": "512x512",
@@ -15,5 +10,5 @@
     ],
     "theme_color": "#f9eeeb",
     "background_color": "#f9eeeb",
-    "display": "standalone"
+    "display": "fullscreen"
 }
