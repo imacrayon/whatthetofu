@@ -25,6 +25,9 @@
     <style>
       :root {
         --background: #f9eeeb;
+        --background-dark: #f4e1dc;
+        --text-dark: #833b27;
+        --text-dark-hover: #b04f35;
         --heading: #ef5274;
         --text: #960e2b;
         --text-light: #E31643;
@@ -97,6 +100,19 @@
       }
       .space-x > * ~ * {
         margin-left: 1rem;
+      }
+      .text-sm {
+        font-size: 12px;
+      }
+      .bg-dark {
+        background: var(--background-dark);
+        color: var(--text-dark);
+      }
+      .bg-dark a {
+        color: var(--text-dark);
+      }
+      .bg-dark a:hover {
+        color: var(--text-dark-hover);
       }
       .sr-only {
         position: absolute;
@@ -195,6 +211,10 @@
             Again
           </button>
         </form>
+      </div>
+      <div class="controls space-x text-sm bg-dark">
+        <a href="https://github.com/imacrayon/whatthetofu#what-the-tofu">Contribute</a>
+        <a href="https://docs.google.com/spreadsheets/d/1A_9r92JAxYahgMTRXUloCc2YUrSckfbJ6AW2kGZP72c">View all resturants</a>
       </div>
     </main>
     <script>
