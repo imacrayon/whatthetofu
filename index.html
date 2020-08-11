@@ -126,6 +126,7 @@
         border-width: 0;
       }
       h1 {
+        outline: none;
         margin: 10vh 0 0;
         font-family: "Fredoka One", cursive;
         font-size: clamp(1.5rem, 4vw, 4rem);
@@ -280,7 +281,7 @@
         let place = filtered[Math.floor(Math.random() * filtered.length)]
         document.getElementById('results').innerHTML = `
           <div id="result">
-            <h1>${place.name}</h1>
+            <h1 id="name" tabindex="-1">${place.name}</h1>
             ${place.comments ? `<div class="comments">${place.comments}</div>` : '' }
             <div class="controls space-x">
               <a class="btn-icon" href="${place.url}" target="_blank">
@@ -290,6 +291,7 @@
             </div>
           </div>
         `
+        document.getElementById('name').focus()
       }
     </script>
   </body>
