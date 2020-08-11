@@ -26,7 +26,8 @@
       :root {
         --background: #f9eeeb;
         --heading: #ef5274;
-        --text: #9f0f2e;
+        --text: #960e2b;
+        --text-light: #E31643;
         --text-hover: #ef5274;
       }
       *,
@@ -42,6 +43,7 @@
         margin: 0;
         padding: 0;
         background: var(--background);
+        color: var(--text);
         font-family: "Nunito", sans-serif;
         height: 100%;
         overflow: hidden;
@@ -60,19 +62,25 @@
         margin-top: auto;
         flex: 1;
       }
+      #results .controls {
+        margin: 10vh 0 0;
+      }
+      #results .controls > a {
+        color: var(--text-light);
+      }
       #result {
         text-align: center;
       }
+      .comments {
+        max-width: 520px;
+        margin: .5rem auto 0 auto;
+      }
       .controls {
-        display: flex;
         align-items: center;
         justify-content: center;
         padding: 1rem;
         color: var(--text);
         font-weight: 600;
-      }
-      .controls > * ~ * {
-        margin-left: 1rem;
       }
       .controls .btn-icon {
         font-family: "Nunito", sans-serif;
@@ -84,13 +92,36 @@
       .controls .btn-icon:focus {
         color: var(--text-hover);
       }
+      .space-x {
+        display: flex;
+      }
+      .space-x > * ~ * {
+        margin-left: 1rem;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
       h1 {
+        margin: 10vh 0 0;
         font-family: "Fredoka One", cursive;
         font-size: clamp(1.5rem, 4vw, 4rem);
+        line-height: 1.25;
         color: var(--heading);
       }
       a {
         text-decoration: none;
+        color: var(--text)
+      }
+      a:hover {
+        color: var(--text-hover)
       }
       button {
         -webkit-appearance: button;
@@ -149,383 +180,97 @@
   <body>
     <main id="content">
       <div id="results"></div>
-      <form class="controls">
-        <label>
-          Category:
-          <select name="category">
-            <option value="">Any</option>
-          </select>
-        </label>
-        <button class="btn-icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polyline points="17 1 21 5 17 9"></polyline>
-            <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-            <polyline points="7 23 3 19 7 15"></polyline>
-            <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-          </svg>
-          Again
-        </button>
-      </form>
+      <div class="controls space-x">
+        <form id="filters" class="space-x">
+          <div>
+            <label for="category" class="sr-only">Category</label>
+            <select id="category" name="category">
+              <option value="">Any category</option>
+            </select>
+          </div>
+          <button class="btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+            </svg>
+            Again
+          </button>
+        </form>
+      </div>
     </main>
     <script>
-      let places = [
-        {
-          name: "Blaze",
-          menu: "https://hq.blazepizza.com/menu/",
-          categories: ["Pizza"],
-        },
-        {
-          name: "Il Vicino",
-          menu: "https://ilvicino.com/menu/",
-          categories: ["Pizza"],
-        },
-        {
-          name: "Piatto",
-          menu: "https://www.piattoict.com/#menu-page",
-          categories: ["Pizza"],
-        },
-        {
-          name: "Cool Breeze Pizza",
-          menu: "https://www.facebook.com/CoolBreezePizza/?ref=page_internal",
-          categories: ["Pizza"],
-        },
-        {
-          name: "Twin Peaks",
-          menu: "https://twinpeaksrestaurant.com/menu",
-          categories: ["American"],
-        },
-        {
-          name: "Red Robin",
-          menu: "https://www.redrobin.com/",
-          categories: ["American"],
-        },
-        {
-          name: "Yo-B",
-          menu: "https://www.yelp.com/menu/yo-b-yogurt-and-burgers-wichita",
-          categories: ["American"],
-        },
-        {
-          name: "Lotus Leaf",
-          menu: "https://lotusleafwichita.com/#menu",
-          categories: ["American"],
-        },
-        {
-          name: "Nortons Brewing Company",
-          menu: "https://nortonsbrewing.com/product-category/food-to-go/",
-          categories: ["American"],
-        },
-        {
-          name: "Burger Fi",
-          menu: "https://www.burgerfi.com/menu",
-          categories: ["American"],
-        },
-        {
-          name: "The Anchor",
-          menu: "http://anchorwichita.com/#menu-page",
-          categories: ["American"],
-        },
-        {
-          name: "Tanyas Soup",
-          menu: "http://www.tskwichita.com/#menu-page",
-          categories: ["American"],
-        },
-        {
-          name: "Lemongrass",
-          menu: "https://www.lemongrasswichita.com",
-          categories: ["Asian"],
-        },
-        {
-          name: "Bann Thai",
-          menu: "https://www.bannthaiwichita.com",
-          categories: ["Asian"],
-        },
-        {
-          name: "Oh Yeah! China Bistro",
-          menu: "https://www.ohyeahbistro.com",
-          categories: ["Asian"],
-        },
-        {
-          name: "Yokohama",
-          menu: "https://wichitaramen.com/#menu",
-          categories: ["Asian"],
-        },
-        {
-          name: "Thai Traditions",
-          menu: "https://www.yelp.com/menu/thai-tradition-wichita",
-          categories: ["Asian"],
-        },
-        {
-          name: "Chiang Mai Thai",
-          menu: "https://www.chiangmaithaiks.com",
-          categories: ["Asian"],
-        },
-        {
-          name: "Thai House",
-          menu: "https://www.thaihousewichita.com/menu/",
-          categories: ["Asian"],
-        },
-        {
-          name: "Little Saigon",
-          menu:
-            "https://www.tripadvisor.com/LocationPhotoDirectLink-g39143-d4714765-i246379807-Little_Saigon-Wichita_Kansas.html",
-          categories: ["Asian"],
-        },
-        {
-          name: "Vietnom Nom",
-          menu:
-            "https://static1.squarespace.com/static/5cae99c665a707e062e7b0bf/t/5ef75658fe8b687d4e538f4d/1593267800798/Store+Menu+%286.27.20%29.pdf",
-          categories: ["Asian"],
-        },
-        {
-          name: "Sapporo",
-          menu: "http://www.sapporoks.com/menu-2/",
-          categories: ["Asian"],
-        },
-        {
-          name: "Xing Xing",
-          menu: "https://www.facebook.com/RiceAndRollByXingXing",
-          categories: ["Asian"],
-        },
-        {
-          name: "District Taqueria",
-          menu:
-            "http://districttaqueria.com/public/menu/DistrictTaqueria_Menu.pdf",
-          categories: ["Mexican"],
-        },
-        {
-          name: "Molino’s",
-          menu:
-            "http://molinoscuisine.com/wp-content/uploads/2016/04/Menu-Dinner_c2.png?x57453",
-          categories: ["Mexican"],
-        },
-        {
-          name: "On the Border",
-          menu: "https://www.ontheborder.com/menu",
-          categories: ["Mexican"],
-        },
-        {
-          name: "Felipe’s",
-          menu: "https://www.felipes1967.com/menu/",
-          categories: ["Mexican"],
-        },
-        {
-          name: "La Semilla",
-          menu:
-            "https://www.facebook.com/La-Semilla-Mexican-Grill-LLC-1278137905670319/",
-          categories: ["Mexican", "Food Truck"],
-        },
-        {
-          name: "Adios Nachoria at Wave",
-          menu: "https://www.waveict.com/eat-drink",
-          categories: ["Mexican"],
-        },
-        {
-          name: "Prost",
-          menu: "https://www.prostwichita.com/carryout-menu",
-          categories: ["European"],
-        },
-        {
-          name: "R Coffee House",
-          menu: "https://www.facebook.com/RCoffeeHouseRiverside",
-          categories: ["Wednesday"],
-        },
-        {
-          name: "Donut Whole",
-          menu: "https://www.yelp.com/menu/the-donut-whole-wichita-2",
-          categories: ["Wednesday"],
-        },
-        {
-          name: "Beautiful Day Cafe",
-          menu: "http://beautifuldaycafe.com/menu/",
-          categories: ["Breakfast"],
-        },
-        {
-          name: "Reverie Roasters",
-          menu: "https://www.reverieroasters.com/",
-          categories: ["Breakfast"],
-        },
-        {
-          name: "Bagel Haus",
-          menu:
-            "http://nebula.wsimg.com/65fd69b30075f28f8952bb7cc71c2bfa?AccessKeyId=B655D5448F3B3A442E14&disposition=0&alloworigin=1",
-          categories: ["Breakfast"],
-        },
-        {
-          name: "College Hill Deli",
-          menu: "https://locu.com/places/college-hill-deli-wichita-us/",
-          categories: ["Mediterranean"],
-        },
-        {
-          name: "N&J",
-          menu: "https://njcafebakery.com/menu.html",
-          categories: ["Mediterranean"],
-        },
-        {
-          name: "Bella Luna",
-          menu: "https://www.bellalunacafe.com/menus-1",
-          categories: ["Mediterranean"],
-        },
-        {
-          name: "Two Olives",
-          menu:
-            "https://twooliveswichita.com/wp-content/uploads/2020/05/Two-Olives-Dine-In-and-Carryout-2.pdf",
-          categories: ["Mediterranean"],
-        },
-        {
-          name: "Nice Bites",
-          menu: "https://nicebitesbakery.com/menu/",
-          categories: ["Dessert"],
-        },
-        {
-          name: "Milk Float",
-          menu: "https://www.facebook.com/milkfloat/",
-          categories: ["Dessert"],
-        },
-        {
-          name: "Monica’s Bunt Cakes",
-          menu: "http://www.monicasbundtcake.com/",
-          categories: ["Dessert"],
-        },
-        {
-          name: "Little Lion",
-          menu: "https://my-site-105419-105278.square.site/",
-          categories: ["Breakfast", "Dessert"],
-        },
-        {
-          name: "Placeholder Coffee",
-          menu:
-            "https://static1.squarespace.com/static/5e56a9f0b2d7590aa7c8ea6f/t/5ec6e79d656a214f462d7e54/1590093728012/Placeholder-Coffee-Menu.pdf",
-          categories: ["Breakfast"],
-        },
-        {
-          name: "The No Bake Cafe",
-          menu: "https://www.facebook.com/thenobakecafe",
-          categories: ["Dessert"],
-        },
-        {
-          name: "Cameo Cakes",
-          menu: "http://cameocakes.com/",
-          categories: ["Dessert"],
-        },
-        {
-          name: "Kind Kravings",
-          menu: "http://www.kindkravings.com/menu/",
-          categories: ["Food Truck"],
-        },
-        {
-          name: "Wheat Street Dogs",
-          menu: "https://www.wheatstreetdogs.com/menu",
-          categories: ["Food Truck"],
-        },
-        {
-          name: "Nora’s Kitchen",
-          menu: "https://www.noraskitchenict.com/menus",
-          categories: ["Food Truck"],
-        },
-        {
-          name: "Lumpiapalooza",
-          menu: "https://www.facebook.com/LumpiaPalooza/",
-          categories: ["Food Truck"],
-        },
-        {
-          name: "Consuelos Street Grill",
-          menu:
-            "https://www.facebook.com/Consuelos-Street-Grill-170277066928530/",
-          categories: ["Food Truck"],
-        },
-        {
-          name: "Passage to India",
-          menu: "https://www.yelp.com/menu/passage-to-india-wichita",
-          categories: ["Indian"],
-        },
-        {
-          name: "New Paradise",
-          menu: "http://newparadiserestaurant.com#restaurant-menu",
-          categories: ["Indian"],
-        },
-        {
-          name: "Paleteria La Reyna",
-          menu:
-            "https://www.tripadvisor.com/Restaurant_Review-g39143-d820597-Reviews-Paleteria_LA_Reyna-Wichita_Kansas.html",
-          categories: ["Snacks"],
-        },
-        {
-          name: "Taco Bell",
-          menu: "https://www.tacobell.com/food",
-          categories: ["Fast food"],
-        },
-        {
-          name: "Sonic",
-          menu: "https://www.sonicdrivein.com/menu",
-          categories: ["Fast food"],
-        },
-        {
-          name: "Burger King",
-          menu: "https://www.bk.com/menu",
-          categories: ["Fast food"],
-        },
-        {
-          name: "Taco Locale",
-          menu: "https://www.tacolocaleict.com/s/order",
-          categories: ["Mexican"],
-        },
-      ];
+      window.places = []
+      fetch('https://sheets.googleapis.com/v4/spreadsheets/1A_9r92JAxYahgMTRXUloCc2YUrSckfbJ6AW2kGZP72c/values/Sheet1?key=AIzaSyDeNG-eBUw5kN8HZ1fif8rS1N8xL7DXguU')
+        .then(response => response.json())
+        .then(response => response.values.map(row => ({
+          name: row[0],
+          categories: row[1] ? row[1].split(', ') : [],
+          comments: row[2],
+          url: row[3],
+        })))
+        .then(places => {
+          window.places = places.slice(1) // First row contains headers
+          initalize()
+        })
+        .catch(response => {
+          document.getElementById('results').innerHTML = 'There was an error fetching resturant data.'
+        })
 
-      let category = new URLSearchParams(window.location.search).get(
-        "category"
-      );
-
-      filtered = places;
-      if (category) {
-        filtered = places.filter((place) =>
-          place.categories.includes(category)
-        );
+      function initalize() {
+        let filters = document.getElementById('filters')
+        filters.addEventListener('submit', event => {
+          event.preventDefault()
+          showRandomPlace(event.target.category.value)
+        })
+        initalizeCatagoryMenu(filters.category)
+        showRandomPlace(filters.category.value)
       }
 
-      let place = filtered[Math.floor(Math.random() * filtered.length)];
-      document.getElementById("results").innerHTML = `
-        <div id="result">
-          <h1>${place.name}</h1>
-          <div class="controls">
-            <a class="btn-icon" href="${place.menu}" target="_blank">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
-                Menu
-            </a>
-          </div>
-        </div>
-      `;
-      let categories = places.reduce((categories, place) => {
-        place.categories.forEach((category) => {
-          categories[category] = category;
-        });
-        return categories;
-      }, {});
+      function initalizeCatagoryMenu(menu) {
+        let category = new URLSearchParams(window.location.search).get('category')
+        let categories = places.reduce((categories, place) => {
+          place.categories.forEach((category) => {
+            categories[category] = category
+          })
+          return categories
+        }, {})
+        menu.innerHTML = `
+          ${menu.innerHTML}
+          ${Object.keys(categories)
+            .sort()
+            .map(label =>
+                `<option value="${categories[label]}" ${
+                  categories[label] === category ? "selected" : ""
+                }>${label}</option>`
+            )}
+        `
+        menu.addEventListener('change', event => {
+          showRandomPlace(event.target.value)
+        })
+      }
 
-      let categoryMenu = document.querySelector('[name="category"]');
-      categoryMenu.innerHTML = `
-        <option value="">Any</option>
-        ${Object.keys(categories)
-          .sort()
-          .map(
-            (label) =>
-              `<option value="${categories[label]}" ${
-                categories[label] === category ? "selected" : ""
-              }>${label}</option>`
-          )}
-      `;
-      categoryMenu.addEventListener("change", (event) => {
-        event.target.form.submit();
-      });
+      function showRandomPlace(category = null) {
+        let filtered = window.places
+        if (category) {
+          history.replaceState({ places, category }, '', `?category=${category}`)
+          filtered = places.filter((place) =>
+            place.categories.includes(category)
+          )
+        }
+
+        let place = filtered[Math.floor(Math.random() * filtered.length)]
+        document.getElementById('results').innerHTML = `
+          <div id="result">
+            <h1>${place.name}</h1>
+            ${place.comments ? `<div class="comments">${place.comments}</div>` : '' }
+            <div class="controls space-x">
+              <a class="btn-icon" href="${place.url}" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+                  Menu
+              </a>
+            </div>
+          </div>
+        `
+      }
     </script>
   </body>
 </html>
